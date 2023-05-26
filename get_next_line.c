@@ -14,8 +14,8 @@
 
 void	free_list(t_buffer_list l)
 {
-	while (l.list--)
-		free(l.list + l.len);
+	while (l.len--)
+		free(l.list++);
 }
 
 t_buffer	*update_list(t_buffer_list l, int fd)
@@ -59,13 +59,18 @@ t_buffer	*find(t_buffer_list l, int fd)
 	return (NULL);
 }
 
+char	*get_line(t_buffer *buf)
+{
+	(void)buf;
+	return (NULL);
+}
+
 char	*get_next_line(int fd)
 {
-	static t_buffer_list	list;
+	static t_buffer_list	list = {NULL, 0};
 	t_buffer				*buf;
 	ssize_t					len;
 
-	//static t_buffer_list	list = {NULL, 0};
 	buf = find(list, fd);
 	if (buf == NULL)
 		buf = update_list(list, fd);

@@ -17,10 +17,10 @@
 #  define BUFFER_SIZE 4096
 # endif
 
-#include <stddef.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <unistd.h>
+# include <stddef.h>
+# include <stdlib.h>
+# include <sys/types.h>
+# include <unistd.h>
 
 struct							s_buffer
 {
@@ -39,9 +39,14 @@ typedef struct s_buffer_list	t_buffer_list;
 
 char		*get_next_line(int fd);
 t_buffer	*find(t_buffer_list list, int fd);
-ssize_t		read_file(t_buffer *buf);
 t_buffer	*update_list(t_buffer_list list, int fd);
 void		free_list(t_buffer_list list);
 char		*get_line(t_buffer *buf);
+
+ssize_t		read_file(t_buffer *buf);
+char		*ft_strjoin(const char *s1, const char *s2);
+void		*ft_memmove(void *dst, const void *src, size_t len);
+char		*ft_strndup(const char *str, size_t n);
+void		*ft_memchr(const void *s, int c, size_t n);
 
 #endif
