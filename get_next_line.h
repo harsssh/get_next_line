@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 15:54:16 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/05/27 20:16:39 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/05/27 20:21:03 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void			remove_node(t_buffer_list **list, int fd);
 char			*get_line(t_buffer *buf);
 
 ssize_t			read_file(t_buffer *buf);
-char			*ft_strjoin_consume(const char *s1, const char *s2);
+char			*ft_strjoin_consume(char *s1, char *s2);
 void			*ft_memmove(void *dst, const void *src, size_t len);
 char			*ft_strndup(const char *str, size_t n);
 void			*ft_memchr(const void *s, int c, size_t n);
