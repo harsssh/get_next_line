@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 15:54:16 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/05/24 20:17:30 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/05/27 20:16:39 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 #  define BUFFER_SIZE 4096
 # endif
 
-# include <stddef.h>
 # include <stdlib.h>
 # include <sys/types.h>
 # include <unistd.h>
@@ -32,21 +31,22 @@ typedef struct s_buffer			t_buffer;
 
 struct							s_buffer_list
 {
-	t_buffer					*list;
-	size_t						len;
+	struct s_buffer				*buf;
+	struct s_buffer_list		*next;
+	struct s_buffer_list		*prev;
 };
 typedef struct s_buffer_list	t_buffer_list;
 
-char		*get_next_line(int fd);
-t_buffer	*find(t_buffer_list list, int fd);
-t_buffer	*update_list(t_buffer_list list, int fd);
-void		free_list(t_buffer_list list);
-char		*get_line(t_buffer *buf);
+char			*get_next_line(int fd);
+t_buffer_list	*find_node(t_buffer_list *list, int fd);
+t_buffer_list	*push_front_new_node(t_buffer_list **list, int fd);
+void			remove_node(t_buffer_list **list, int fd);
+char			*get_line(t_buffer *buf);
 
-ssize_t		read_file(t_buffer *buf);
-char		*ft_strjoin(const char *s1, const char *s2);
-void		*ft_memmove(void *dst, const void *src, size_t len);
-char		*ft_strndup(const char *str, size_t n);
-void		*ft_memchr(const void *s, int c, size_t n);
+ssize_t			read_file(t_buffer *buf);
+char			*ft_strjoin_consume(const char *s1, const char *s2);
+void			*ft_memmove(void *dst, const void *src, size_t len);
+char			*ft_strndup(const char *str, size_t n);
+void			*ft_memchr(const void *s, int c, size_t n);
 
 #endif

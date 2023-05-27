@@ -6,12 +6,11 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 15:55:36 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/05/24 21:24:14 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/05/27 20:16:19 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdlib.h>
 
 ssize_t	read_file(t_buffer *buf)
 {
@@ -23,7 +22,7 @@ ssize_t	read_file(t_buffer *buf)
 	return (len);
 }
 
-char	*ft_strjoin(const char *s1, const char *s2)
+char	*ft_strjoin_consume(char *s1, char *s2)
 {
 	char	*buf;
 	size_t	len1;
@@ -40,7 +39,9 @@ char	*ft_strjoin(const char *s1, const char *s2)
 		return (NULL);
 	ft_memmove(buf, s1, len1);
 	ft_memmove(buf + len1, s2, len2);
-	buf[len1 + len2 + 1] = '\0';
+	buf[len1 + len2] = '\0';
+	free(s1);
+	free(s2);
 	return (buf);
 }
 
