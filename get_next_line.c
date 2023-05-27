@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 15:54:55 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/05/27 20:19:33 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/05/27 21:00:31 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ char	*get_line(t_buffer *buf)
 
 	line = NULL;
 	len = read_file(buf);
-	while (len > 0)
+	while (len > 0 || buf->len > 0)
 	{
 		newline_addr = ft_memchr(buf->buf, '\n', buf->len);
 		if (newline_addr == NULL)
@@ -86,8 +86,8 @@ char	*get_line(t_buffer *buf)
 		else
 			copy_len = newline_addr - buf->buf + 1;
 		join_src = ft_strndup(buf->buf, copy_len);
-		ft_memmove(buf->buf, buf->buf + copy_len, buf->len - copy_len);
 		buf->len -= copy_len;
+		ft_memmove(buf->buf, buf->buf + copy_len, buf->len);
 		line = ft_strjoin_consume(line, join_src);
 		if (line == NULL || newline_addr != NULL)
 			break ;
