@@ -30,6 +30,8 @@ t_buffer_list	*push_front_new_node(t_buffer_list **list, int fd)
 	node->buf = buf;
 	node->next = *list;
 	node->prev = NULL;
+	if (*list != NULL)
+		(*list)->prev = node;
 	*list = node;
 	return (node);
 }
@@ -100,6 +102,7 @@ char	*get_next_line(int fd)
 	static t_buffer_list	*list;
 	t_buffer_list			*node;
 	char					*line;
+	size_t					len;
 
 	node = find_node(list, fd);
 	if (node == NULL)
@@ -109,7 +112,10 @@ char	*get_next_line(int fd)
 			return (NULL);
 	}
 	line = get_line(node->buf);
-	if (line == NULL)
+	len = 0;
+	while (line && line[len])
+		len++;
+	if (line == NULL || ft_memchr(line, '\n', len) == NULL)
 		remove_node(&list, fd);
 	return (line);
 }
