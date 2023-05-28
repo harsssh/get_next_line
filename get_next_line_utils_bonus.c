@@ -5,21 +5,56 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/27 21:02:39 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/05/27 21:02:40 by kemizuki         ###   ########.fr       */
+/*   Created: 2023/05/28 10:46:18 by kemizuki          #+#    #+#             */
+/*   Updated: 2023/05/28 10:46:20 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-ssize_t	read_file(t_buffer *buf)
+// create a new node and add it to the head of the list
+// the return value is the created node
+t_buffer_list	*push_front_new_node(t_buffer_list **list, int fd)
 {
-	ssize_t	len;
+	t_buffer		*buf;
+	t_buffer_list	*node;
 
-	len = read(buf->fd, buf->buf + buf->len, BUFFER_SIZE - buf->len);
-	if (len > 0)
-		buf->len += len;
-	return (len);
+	if (list == NULL)
+		return (NULL);
+	buf = malloc(sizeof(t_buffer));
+	if (buf == NULL)
+		return (NULL);
+	buf->fd = fd;
+	buf->len = 0;
+	node = malloc(sizeof(t_buffer_list));
+	if (node == NULL)
+		return (NULL);
+	node->buf = buf;
+	node->next = *list;
+	node->prev = NULL;
+	if (*list != NULL)
+		(*list)->prev = node;
+	*list = node;
+	return (node);
+}
+
+void	remove_node(t_buffer_list **list, int fd)
+{
+	t_buffer_list	*node;
+
+	if (list == NULL)
+		return ;
+	node = find_node(*list, fd);
+	if (node == NULL)
+		return ;
+	if (node->prev != NULL)
+		node->prev->next = node->next;
+	else
+		*list = node->next;
+	if (node->next != NULL)
+		node->next->prev = node->prev;
+	free(node->buf);
+	free(node);
 }
 
 char	*ft_strjoin_consume(char *s1, char *s2)
@@ -65,25 +100,6 @@ void	*ft_memmove(void *dst, const void *src, size_t len)
 			*(unsigned char *)dst-- = *(unsigned char *)src--;
 	}
 	return (addr);
-}
-
-char	*ft_strndup(const char *str, size_t n)
-{
-	char	*buf;
-	size_t	substr_len;
-
-	if (str == NULL)
-		return (NULL);
-	substr_len = 0;
-	while (substr_len < n && str[substr_len])
-		substr_len++;
-	buf = malloc((substr_len + 1) * sizeof(char));
-	if (buf == NULL)
-		return (NULL);
-	buf[substr_len] = '\0';
-	while (substr_len--)
-		buf[substr_len] = str[substr_len];
-	return (buf);
 }
 
 void	*ft_memchr(const void *s, int c, size_t n)

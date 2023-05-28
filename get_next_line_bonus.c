@@ -5,54 +5,41 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/27 21:02:17 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/05/27 21:02:22 by kemizuki         ###   ########.fr       */
+/*   Created: 2023/05/28 10:45:28 by kemizuki          #+#    #+#             */
+/*   Updated: 2023/05/28 10:45:30 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-t_buffer_list	*push_front_new_node(t_buffer_list **list, int fd)
+ssize_t	read_file(t_buffer *buf)
 {
-	t_buffer		*buf;
-	t_buffer_list	*node;
+	ssize_t	len;
 
-	if (list == NULL)
-		return (NULL);
-	buf = malloc(sizeof(t_buffer));
-	if (buf == NULL)
-		return (NULL);
-	buf->fd = fd;
-	buf->len = 0;
-	node = malloc(sizeof(t_buffer_list));
-	if (node == NULL)
-		return (NULL);
-	node->buf = buf;
-	node->next = *list;
-	node->prev = NULL;
-	if (*list != NULL)
-		(*list)->prev = node;
-	*list = node;
-	return (node);
+	len = read(buf->fd, buf->buf + buf->len, BUFFER_SIZE - buf->len);
+	if (len > 0)
+		buf->len += len;
+	return (len);
 }
 
-void	remove_node(t_buffer_list **list, int fd)
+char	*duplicate_and_shift(t_buffer *buf, size_t n)
 {
-	t_buffer_list	*node;
+	char	*dup;
+	size_t	dup_len;
 
-	if (list == NULL)
-		return ;
-	node = find_node(*list, fd);
-	if (node == NULL)
-		return ;
-	if (node->prev != NULL)
-		node->prev->next = node->next;
-	else
-		*list = node->next;
-	if (node->next != NULL)
-		node->next->prev = node->prev;
-	free(node->buf);
-	free(node);
+	if (buf == NULL)
+		return (NULL);
+	dup_len = 0;
+	while (dup_len < n && buf->buf[dup_len])
+		dup_len++;
+	dup = malloc((dup_len + 1) * sizeof(char));
+	if (buf == NULL)
+		return (NULL);
+	ft_memmove(dup, buf->buf, dup_len);
+	dup[dup_len] = '\0';
+	buf->len -= dup_len;
+	ft_memmove(buf->buf, buf->buf + dup_len, buf->len);
+	return (dup);
 }
 
 t_buffer_list	*find_node(t_buffer_list *list, int fd)
@@ -71,29 +58,30 @@ t_buffer_list	*find_node(t_buffer_list *list, int fd)
 
 char	*get_line(t_buffer *buf)
 {
-	ssize_t	len;
 	size_t	copy_len;
 	char	*line;
 	char	*newline_addr;
-	char	*join_src;
+	char	*join_src[2];
 
 	line = NULL;
-	len = read_file(buf);
-	while (len > 0 || buf->len > 0)
+	join_src[0] = NULL;
+	while (read_file(buf) > 0 || buf->len > 0)
 	{
 		newline_addr = ft_memchr(buf->buf, '\n', buf->len);
 		if (newline_addr == NULL)
 			copy_len = buf->len;
 		else
 			copy_len = newline_addr - buf->buf + 1;
-		join_src = ft_strndup(buf->buf, copy_len);
-		buf->len -= copy_len;
-		ft_memmove(buf->buf, buf->buf + copy_len, buf->len);
-		line = ft_strjoin_consume(line, join_src);
+		join_src[0] = line;
+		join_src[1] = duplicate_and_shift(buf, copy_len);
+		if (join_src[1] == NULL)
+			break ;
+		line = ft_strjoin_consume(join_src[0], join_src[1]);
 		if (line == NULL || newline_addr != NULL)
 			break ;
-		len = read_file(buf);
 	}
+	if (line == NULL)
+		free(join_src[0]);
 	return (line);
 }
 
