@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 15:55:36 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/05/28 10:28:48 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/05/28 12:53:43 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,9 @@ void	remove_node(t_buffer_list **list, int fd)
 	free(node);
 }
 
+// return concatenated string
+// arguments must be freeable
+// arguments are always freed
 char	*ft_strjoin_consume(char *s1, char *s2)
 {
 	char	*buf;
@@ -71,7 +74,11 @@ char	*ft_strjoin_consume(char *s1, char *s2)
 		len2++;
 	buf = malloc((len1 + len2 + 1) * sizeof(char));
 	if (buf == NULL)
+	{
+		free(s1);
+		free(s2);
 		return (NULL);
+	}
 	ft_memmove(buf, s1, len1);
 	ft_memmove(buf + len1, s2, len2);
 	buf[len1 + len2] = '\0';
