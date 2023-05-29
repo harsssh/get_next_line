@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/28 10:45:57 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/05/28 10:46:08 by kemizuki         ###   ########.fr       */
+/*   Created: 2023/05/29 16:23:02 by kemizuki          #+#    #+#             */
+/*   Updated: 2023/05/29 16:23:18 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,15 +37,15 @@ struct							s_buffer_list
 };
 typedef struct s_buffer_list	t_buffer_list;
 
-t_buffer_list	*find_node(t_buffer_list *list, int fd);
 ssize_t			read_file(t_buffer *buf);
 char			*duplicate_and_shift(t_buffer *buf, size_t n);
+char			*ft_strjoin_consume(char *s1, char *s2);
 char			*get_next_line(int fd);
 char			*get_line(t_buffer *buf);
 
 t_buffer_list	*push_front_new_node(t_buffer_list **list, int fd);
 void			remove_node(t_buffer_list **list, int fd);
-char			*ft_strjoin_consume(char *s1, char *s2);
+t_buffer_list	*find_node(t_buffer_list *list, int fd);
 void			*ft_memmove(void *dst, const void *src, size_t len);
 char			*ft_strndup(const char *str, size_t n);
 void			*ft_memchr(const void *s, int c, size_t n);

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/24 15:55:36 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/05/28 12:53:43 by kemizuki         ###   ########.fr       */
+/*   Created: 2023/05/29 16:22:34 by kemizuki          #+#    #+#             */
+/*   Updated: 2023/05/29 16:22:35 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,34 +57,18 @@ void	remove_node(t_buffer_list **list, int fd)
 	free(node);
 }
 
-// return concatenated string
-// arguments must be freeable
-// arguments are always freed
-char	*ft_strjoin_consume(char *s1, char *s2)
+t_buffer_list	*find_node(t_buffer_list *list, int fd)
 {
-	char	*buf;
-	size_t	len1;
-	size_t	len2;
+	t_buffer_list	*head;
 
-	len1 = 0;
-	while (s1 && s1[len1])
-		len1++;
-	len2 = 0;
-	while (s2 && s2[len2])
-		len2++;
-	buf = malloc((len1 + len2 + 1) * sizeof(char));
-	if (buf == NULL)
+	head = list;
+	while (head)
 	{
-		free(s1);
-		free(s2);
-		return (NULL);
+		if (head->buf->fd == fd)
+			return (head);
+		head = head->next;
 	}
-	ft_memmove(buf, s1, len1);
-	ft_memmove(buf + len1, s2, len2);
-	buf[len1 + len2] = '\0';
-	free(s1);
-	free(s2);
-	return (buf);
+	return (NULL);
 }
 
 void	*ft_memmove(void *dst, const void *src, size_t len)

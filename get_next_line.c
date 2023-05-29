@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 15:54:55 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/05/28 13:17:39 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/05/29 16:20:46 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*duplicate_and_shift(t_buffer *buf, size_t n)
 	while (dup_len < n && buf->buf[dup_len])
 		dup_len++;
 	dup = malloc((dup_len + 1) * sizeof(char));
-	if (buf == NULL)
+	if (dup == NULL)
 		return (NULL);
 	ft_memmove(dup, buf->buf, dup_len);
 	dup[dup_len] = '\0';
@@ -42,18 +42,34 @@ char	*duplicate_and_shift(t_buffer *buf, size_t n)
 	return (dup);
 }
 
-t_buffer_list	*find_node(t_buffer_list *list, int fd)
+// return concatenated string
+// arguments must be freeable
+// arguments are always freed
+char	*ft_strjoin_consume(char *s1, char *s2)
 {
-	t_buffer_list	*head;
+	char	*buf;
+	size_t	len1;
+	size_t	len2;
 
-	head = list;
-	while (head)
+	len1 = 0;
+	while (s1 && s1[len1])
+		len1++;
+	len2 = 0;
+	while (s2 && s2[len2])
+		len2++;
+	buf = malloc((len1 + len2 + 1) * sizeof(char));
+	if (buf == NULL)
 	{
-		if (head->buf->fd == fd)
-			return (head);
-		head = head->next;
+		free(s1);
+		free(s2);
+		return (NULL);
 	}
-	return (NULL);
+	ft_memmove(buf, s1, len1);
+	ft_memmove(buf + len1, s2, len2);
+	buf[len1 + len2] = '\0';
+	free(s1);
+	free(s2);
+	return (buf);
 }
 
 char	*get_line(t_buffer *buf)
