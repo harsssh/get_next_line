@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 15:54:55 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/05/30 20:04:15 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/05/30 20:47:55 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ char	*get_line(t_buffer *buf)
 	char	*newline_addr;
 
 	line = NULL;
-	while (read_file(buf) > 0 || buf->len > 0)
+	while (buf->len > 0 || read_file(buf) > 0)
 	{
 		newline_addr = ft_memchr(buf->buf, '\n', buf->len);
 		if (newline_addr == NULL)
