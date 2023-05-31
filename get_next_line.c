@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 15:54:55 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/05/30 20:47:55 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/05/31 16:39:20 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ ssize_t	read_file(t_buffer *buf)
 	len = read(buf->fd, buf->buf + buf->len, BUFFER_SIZE - buf->len);
 	if (len > 0)
 		buf->len += len;
+	else if (len < 0)
+		buf->len = len;
 	return (len);
 }
 
@@ -90,6 +92,8 @@ char	*get_line(t_buffer *buf)
 		if (line == NULL || newline_addr != NULL)
 			break ;
 	}
+	if (buf->len < 0)
+		free(line);
 	return (line);
 }
 

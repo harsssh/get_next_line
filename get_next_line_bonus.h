@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 16:23:02 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/05/29 16:23:18 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/05/31 16:40:43 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ struct							s_buffer
 {
 	int							fd;
 	char						buf[BUFFER_SIZE];
-	size_t						len;
+	ssize_t						len;
 };
 typedef struct s_buffer			t_buffer;
 
@@ -47,7 +47,6 @@ t_buffer_list	*push_front_new_node(t_buffer_list **list, int fd);
 void			remove_node(t_buffer_list **list, int fd);
 t_buffer_list	*find_node(t_buffer_list *list, int fd);
 void			*ft_memmove(void *dst, const void *src, size_t len);
-char			*ft_strndup(const char *str, size_t n);
 void			*ft_memchr(const void *s, int c, size_t n);
 
 #endif
