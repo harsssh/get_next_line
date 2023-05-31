@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 15:54:16 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/05/31 16:36:48 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/05/31 16:55:31 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,14 @@
 # include <stdlib.h>
 # include <sys/types.h>
 # include <unistd.h>
+# include <stdbool.h>
 
 struct							s_buffer
 {
 	int							fd;
 	char						buf[BUFFER_SIZE];
-	ssize_t						len;
+	size_t						len;
+	bool						has_read_error;
 };
 typedef struct s_buffer			t_buffer;
 

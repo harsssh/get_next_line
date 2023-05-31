@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 15:55:36 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/05/29 16:20:49 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/05/31 16:57:07 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ t_buffer_list	*push_front_new_node(t_buffer_list **list, int fd)
 		return (NULL);
 	buf->fd = fd;
 	buf->len = 0;
+	buf->has_read_error = false;
 	node = malloc(sizeof(t_buffer_list));
 	if (node == NULL)
 		return (NULL);

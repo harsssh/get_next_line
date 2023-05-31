@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 16:22:34 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/05/29 16:22:35 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/05/31 16:55:22 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ t_buffer_list	*push_front_new_node(t_buffer_list **list, int fd)
 		return (NULL);
 	buf->fd = fd;
 	buf->len = 0;
+	buf->has_read_error = false;
 	node = malloc(sizeof(t_buffer_list));
 	if (node == NULL)
 		return (NULL);
