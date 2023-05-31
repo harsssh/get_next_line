@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 15:54:55 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/05/31 16:56:09 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/05/31 19:19:14 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ ssize_t	read_file(t_buffer *buf)
 	ssize_t	len;
 
 	len = read(buf->fd, buf->buf + buf->len, BUFFER_SIZE - buf->len);
-	len = -1;
 	if (len > 0)
 		buf->len += len;
 	else if (len < 0)
@@ -36,7 +35,6 @@ char	*duplicate_and_shift(t_buffer *buf, size_t n)
 	while (dup_len < n && buf->buf[dup_len])
 		dup_len++;
 	dup = malloc((dup_len + 1) * sizeof(char));
-	dup = NULL;
 	if (dup == NULL)
 		return (NULL);
 	ft_memmove(dup, buf->buf, dup_len);
