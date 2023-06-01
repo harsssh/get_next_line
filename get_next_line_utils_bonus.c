@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/24 15:55:36 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/05/31 16:57:07 by kemizuki         ###   ########.fr       */
+/*   Created: 2023/06/01 17:36:06 by kemizuki          #+#    #+#             */
+/*   Updated: 2023/06/01 17:36:07 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ t_buffer_list	*push_front_new_node(t_buffer_list **list, int fd)
 		return (NULL);
 	buf->fd = fd;
 	buf->len = 0;
-	buf->has_read_error = false;
+	buf->read_failed = false;
 	node = malloc(sizeof(t_buffer_list));
 	if (node == NULL)
 		return (NULL);
@@ -45,7 +45,9 @@ void	remove_node(t_buffer_list **list, int fd)
 
 	if (list == NULL)
 		return ;
-	node = find_node(*list, fd);
+	node = *list;
+	while (node != NULL && node->buf->fd != fd)
+		node = node->next;
 	if (node == NULL)
 		return ;
 	if (node->prev != NULL)
@@ -56,20 +58,6 @@ void	remove_node(t_buffer_list **list, int fd)
 		node->next->prev = node->prev;
 	free(node->buf);
 	free(node);
-}
-
-t_buffer_list	*find_node(t_buffer_list *list, int fd)
-{
-	t_buffer_list	*head;
-
-	head = list;
-	while (head)
-	{
-		if (head->buf->fd == fd)
-			return (head);
-		head = head->next;
-	}
-	return (NULL);
 }
 
 void	*ft_memmove(void *dst, const void *src, size_t len)
@@ -109,4 +97,27 @@ void	*ft_memchr(const void *s, int c, size_t n)
 	if (n && *str == chr)
 		return ((void *)str);
 	return (NULL);
+}
+
+char	*ft_strjoin(const char *s1, const char *s2)
+{
+	char	*buf;
+	size_t	len1;
+	size_t	len2;
+
+	if (s1 == NULL && s2 == NULL)
+		return (NULL);
+	len1 = 0;
+	while (s1 && s1[len1])
+		len1++;
+	len2 = 0;
+	while (s2 && s2[len2])
+		len2++;
+	buf = malloc((len1 + len2 + 1) * sizeof(char));
+	if (buf == NULL)
+		return (NULL);
+	ft_memmove(buf, s1, len1);
+	ft_memmove(buf + len1, s2, len2);
+	buf[len1 + len2] = '\0';
+	return (buf);
 }

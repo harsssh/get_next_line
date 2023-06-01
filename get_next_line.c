@@ -6,13 +6,13 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 15:54:55 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/05/31 19:19:14 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/06/01 17:36:46 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-ssize_t	read_file(t_buffer *buf)
+static ssize_t	read_file(t_buffer *buf)
 {
 	ssize_t	len;
 
@@ -24,59 +24,49 @@ ssize_t	read_file(t_buffer *buf)
 	return (len);
 }
 
-char	*extract_prefix_and_shift(t_buffer *buf, size_t n)
+static char	*copy_prefix_and_shift(t_buffer *buf, size_t len)
 {
 	char	*prefix;
-	size_t	len;
+	size_t	n;
 
 	if (buf == NULL)
 		return (NULL);
-	len = 0;
-	while (len < n && buf->buf[len])
-		len++;
-	prefix = malloc((len + 1) * sizeof(char));
+	n = 0;
+	while (n < len && buf->buf[n])
+		n++;
+	prefix = malloc((n + 1) * sizeof(char));
 	if (prefix == NULL)
 		return (NULL);
-	ft_memmove(prefix, buf->buf, len);
-	prefix[len] = '\0';
-	buf->len -= len;
-	ft_memmove(buf->buf, buf->buf + len, buf->len);
+	ft_memmove(prefix, buf->buf, n);
+	prefix[n] = '\0';
+	buf->len -= n;
+	ft_memmove(buf->buf, buf->buf + n, buf->len);
 	return (prefix);
 }
 
-// arguments are always freed
-char	*ft_strjoin_consume(char *s1, char *s2)
+static char	*extend_line(char *line, t_buffer *buf, size_t len)
 {
-	char	*buf;
-	size_t	len1;
-	size_t	len2;
+	char	*prefix;
+	char	*tmp;
 
-	if (s1 == NULL && s2 == NULL)
-		return (NULL);
-	len1 = 0;
-	while (s1 && s1[len1])
-		len1++;
-	len2 = 0;
-	while (s2 && s2[len2])
-		len2++;
-	buf = malloc((len1 + len2 + 1) * sizeof(char));
-	if (buf != NULL)
+	prefix = copy_prefix_and_shift(buf, len);
+	if (prefix == NULL)
 	{
-		ft_memmove(buf, s1, len1);
-		ft_memmove(buf + len1, s2, len2);
-		buf[len1 + len2] = '\0';
+		free(line);
+		return (NULL);
 	}
-	free(s1);
-	free(s2);
-	return (buf);
+	tmp = line;
+	line = ft_strjoin(line, prefix);
+	free(tmp);
+	free(prefix);
+	return (line);
 }
 
-char	*get_line(t_buffer *buf)
+static char	*get_line(t_buffer *buf)
 {
-	size_t	copy_len;
 	char	*line;
 	char	*newline_addr;
-	char	*buf_prefix;
+	size_t	copy_len;
 
 	line = NULL;
 	while (buf->len > 0 || read_file(buf) > 0)
@@ -86,8 +76,7 @@ char	*get_line(t_buffer *buf)
 			copy_len = buf->len;
 		else
 			copy_len = newline_addr - buf->buf + 1;
-		buf_prefix = extract_prefix_and_shift(buf, copy_len);
-		line = ft_strjoin_consume(line, buf_prefix);
+		line = extend_line(line, buf, copy_len);
 		if (line == NULL || newline_addr != NULL)
 			break ;
 	}
@@ -104,9 +93,11 @@ char	*get_next_line(int fd)
 	static t_buffer_list	*list;
 	t_buffer_list			*node;
 	char					*line;
-	size_t					len;
+	size_t					i;
 
-	node = find_node(list, fd);
+	node = list;
+	while (node != NULL && node->buf->fd != fd)
+		node = node->next;
 	if (node == NULL)
 	{
 		node = push_front_new_node(&list, fd);
@@ -114,10 +105,10 @@ char	*get_next_line(int fd)
 			return (NULL);
 	}
 	line = get_line(node->buf);
-	len = 0;
-	while (line && line[len])
-		len++;
-	if (line == NULL || ft_memchr(line, '\n', len) == NULL)
+	i = 0;
+	while (line && line[i] && line[i] != '\n')
+		i++;
+	if (line == NULL || line[i] == '\0')
 		remove_node(&list, fd);
 	return (line);
 }
