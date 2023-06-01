@@ -20,32 +20,30 @@ ssize_t	read_file(t_buffer *buf)
 	if (len > 0)
 		buf->len += len;
 	else if (len < 0)
-		buf->has_read_error = true;
+		buf->read_failed = true;
 	return (len);
 }
 
-char	*duplicate_and_shift(t_buffer *buf, size_t n)
+char	*extract_prefix_and_shift(t_buffer *buf, size_t n)
 {
-	char	*dup;
-	size_t	dup_len;
+	char	*prefix;
+	size_t	len;
 
 	if (buf == NULL)
 		return (NULL);
-	dup_len = 0;
-	while (dup_len < n && buf->buf[dup_len])
-		dup_len++;
-	dup = malloc((dup_len + 1) * sizeof(char));
-	if (dup == NULL)
+	len = 0;
+	while (len < n && buf->buf[len])
+		len++;
+	prefix = malloc((len + 1) * sizeof(char));
+	if (prefix == NULL)
 		return (NULL);
-	ft_memmove(dup, buf->buf, dup_len);
-	dup[dup_len] = '\0';
-	buf->len -= dup_len;
-	ft_memmove(buf->buf, buf->buf + dup_len, buf->len);
-	return (dup);
+	ft_memmove(prefix, buf->buf, len);
+	prefix[len] = '\0';
+	buf->len -= len;
+	ft_memmove(buf->buf, buf->buf + len, buf->len);
+	return (prefix);
 }
 
-// return concatenated string
-// arguments must be freeable
 // arguments are always freed
 char	*ft_strjoin_consume(char *s1, char *s2)
 {
@@ -78,6 +76,7 @@ char	*get_line(t_buffer *buf)
 	size_t	copy_len;
 	char	*line;
 	char	*newline_addr;
+	char	*buf_prefix;
 
 	line = NULL;
 	while (buf->len > 0 || read_file(buf) > 0)
@@ -87,11 +86,12 @@ char	*get_line(t_buffer *buf)
 			copy_len = buf->len;
 		else
 			copy_len = newline_addr - buf->buf + 1;
-		line = ft_strjoin_consume(line, duplicate_and_shift(buf, copy_len));
+		buf_prefix = extract_prefix_and_shift(buf, copy_len);
+		line = ft_strjoin_consume(line, buf_prefix);
 		if (line == NULL || newline_addr != NULL)
 			break ;
 	}
-	if (buf->has_read_error)
+	if (buf->read_failed)
 	{
 		free(line);
 		line = NULL;

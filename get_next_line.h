@@ -27,7 +27,7 @@ struct							s_buffer
 	int							fd;
 	char						buf[BUFFER_SIZE];
 	size_t						len;
-	bool						has_read_error;
+	bool						read_failed;
 };
 typedef struct s_buffer			t_buffer;
 
@@ -40,7 +40,7 @@ struct							s_buffer_list
 typedef struct s_buffer_list	t_buffer_list;
 
 ssize_t			read_file(t_buffer *buf);
-char			*duplicate_and_shift(t_buffer *buf, size_t n);
+char			*extract_prefix_and_shift(t_buffer *buf, size_t n);
 char			*ft_strjoin_consume(char *s1, char *s2);
 char			*get_next_line(int fd);
 char			*get_line(t_buffer *buf);
