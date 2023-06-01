@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/01 17:36:20 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/06/01 17:36:38 by kemizuki         ###   ########.fr       */
+/*   Created: 2023/06/01 22:59:37 by kemizuki          #+#    #+#             */
+/*   Updated: 2023/06/01 22:59:45 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,15 @@
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 4096
+# elif BUFFER_SIZE < 0
+#  undef BUFFER_SIZE
+#  define BUFFER_SIZE 4096
 # endif
 
+# include <stdbool.h>
 # include <stdlib.h>
 # include <sys/types.h>
 # include <unistd.h>
-# include <stdbool.h>
 
 struct							s_buffer
 {

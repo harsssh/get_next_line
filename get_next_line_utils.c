@@ -29,7 +29,10 @@ t_buffer_list	*push_front_new_node(t_buffer_list **list, int fd)
 	buf->read_failed = false;
 	node = malloc(sizeof(t_buffer_list));
 	if (node == NULL)
+	{
+		free(buf);
 		return (NULL);
+	}
 	node->buf = buf;
 	node->next = *list;
 	node->prev = NULL;

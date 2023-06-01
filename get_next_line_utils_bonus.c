@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/01 17:36:06 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/06/01 17:36:07 by kemizuki         ###   ########.fr       */
+/*   Created: 2023/06/01 22:59:14 by kemizuki          #+#    #+#             */
+/*   Updated: 2023/06/01 22:59:18 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,10 @@ t_buffer_list	*push_front_new_node(t_buffer_list **list, int fd)
 	buf->read_failed = false;
 	node = malloc(sizeof(t_buffer_list));
 	if (node == NULL)
+	{
+		free(buf);
 		return (NULL);
+	}
 	node->buf = buf;
 	node->next = *list;
 	node->prev = NULL;

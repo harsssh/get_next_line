@@ -15,12 +15,15 @@
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 4096
+# elif BUFFER_SIZE < 0
+#  undef BUFFER_SIZE
+#  define BUFFER_SIZE 4096
 # endif
 
+# include <stdbool.h>
 # include <stdlib.h>
 # include <sys/types.h>
 # include <unistd.h>
-# include <stdbool.h>
 
 struct							s_buffer
 {

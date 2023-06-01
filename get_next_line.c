@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 15:54:55 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/06/01 17:36:46 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/06/01 23:00:51 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@ static ssize_t	read_file(t_buffer *buf)
 {
 	ssize_t	len;
 
-	len = read(buf->fd, buf->buf + buf->len, BUFFER_SIZE - buf->len);
+	len = read(buf->fd, buf->buf, BUFFER_SIZE);
 	if (len > 0)
-		buf->len += len;
+		buf->len = len;
 	else if (len < 0)
 		buf->read_failed = true;
 	return (len);
