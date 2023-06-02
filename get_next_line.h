@@ -6,16 +6,18 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 15:54:16 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/06/01 23:08:07 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/06/02 20:09:54 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
-# if !defined(BUFFER_SIZE) || BUFFER_SIZE < 0
-#  undef BUFFER_SIZE
+# ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 4096
+# elif BUFFER_SIZE < 0
+#  undef BUFFER_SIZE
+#  define BUFFER_SIZE 0
 # endif
 
 # include <stdbool.h>
