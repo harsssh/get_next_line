@@ -6,11 +6,11 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 22:59:14 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/06/01 22:59:18 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/06/03 16:48:53 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 // create a new node and add it to the head of the list
 // the return value is the created node

@@ -6,11 +6,11 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 17:35:50 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/06/02 20:12:27 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/06/03 16:48:43 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 static ssize_t	read_file(t_buffer *buf)
 {
